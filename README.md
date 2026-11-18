@@ -135,7 +135,9 @@ pip install -r requirements.txt
 ```
 
 ```bash
-export RUTA_IEEE=/ruta/a/ieee-cis    # opcional: si no, se descarga con kagglehub
+# Datos: coloca train_transaction.csv y train_identity.csv en datos/ieee-cis (git los ignora, pesan 710 MB),
+# o apunta a otra carpeta con RUTA_IEEE; si no hay nada, se descargan con kagglehub
+export RUTA_IEEE=/ruta/a/ieee-cis    # opcional
 ./correr_todo.sh                     # ~45 min en una laptop de 2 núcleos y 8 GB
 ```
 

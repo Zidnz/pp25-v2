@@ -1,6 +1,6 @@
 lakehouse/
 modelos/
 *.csv.zip
-data/
+datos/
 __pycache__/
 .ipynb_checkpoints/

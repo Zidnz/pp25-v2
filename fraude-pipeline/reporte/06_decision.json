@@ -1,0 +1,47 @@
+{
+  "fraude_total_prueba_usd": 495244.397,
+  "transacciones_prueba": 94635,
+  "bayes": {
+    "revisadas_pct": 0.22231732445712474,
+    "costo_total": 98456.887,
+    "monto_recuperado_pct": 0.9286415208045251,
+    "ahorro_vs_no_revisar_pct": 0.8011953540586951
+  },
+  "mochila": [
+    {
+      "criterio": "Por probabilidad",
+      "fraudes_atrapados": 1760,
+      "recall": 0.5362583790371724,
+      "monto_recuperado_usd": 206924.88299999997,
+      "monto_recuperado_pct": 0.417823773986079
+    },
+    {
+      "criterio": "Por pérdida esperada (óptimo)",
+      "fraudes_atrapados": 1097,
+      "recall": 0.3342474101157831,
+      "monto_recuperado_usd": 310850.468,
+      "monto_recuperado_pct": 0.6276708426849703
+    },
+    {
+      "criterio": "Por monto",
+      "fraudes_atrapados": 174,
+      "recall": 0.05301645338208409,
+      "monto_recuperado_usd": 177647.33,
+      "monto_recuperado_pct": 0.3587063903723478
+    }
+  ],
+  "umbral_perdida_esperada_usd": 31.18743356884802,
+  "colas": {
+    "alertas_por_dia": 103.82360750474123,
+    "horas_analista_por_dia": 41,
+    "pico_analistas": 3,
+    "hora_pico": 20,
+    "plantilla_fija_necesaria": 3,
+    "simulacion_hora_pico": {
+      "espera_media_min_sim": 1.1902803692078312,
+      "espera_media_min_erlang": 1.177683411105042,
+      "p_espera_15_sim": 0.016796666666666668,
+      "p_espera_15_erlang": 0.016629837555275178
+    }
+  }
+}

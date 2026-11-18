@@ -1,148 +1,147 @@
 <div align="center">
 
-<h1>Detección de Fraude Bancario</h1>
-<h3>Pipeline de datos con Spark, Delta Lake, MySQL y MongoDB — PP 25 v2</h3>
+<h1>Detección de Fraude en Transacciones Digitales</h1>
+<h3>Lakehouse con Spark, Kafka y PostgreSQL sobre datos reales (IEEE-CIS) — PP 25 v2</h3>
 
 <p>
-  <img src="https://img.shields.io/badge/estado-en%20desarrollo-orange?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/estado-versi%C3%B3n%20corregida-brightgreen?style=for-the-badge"/>
   <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Apache%20Spark-PySpark-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Delta%20Lake-lakehouse-00ADD8?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/PySpark-4.0.1-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Delta%20Lake-4.0.0-00ADD8?style=for-the-badge"/>
 </p>
 <p>
-  <img src="https://img.shields.io/badge/MySQL-transacciones-4479A1?style=for-the-badge&logo=mysql&logoColor=white"/>
-  <img src="https://img.shields.io/badge/MongoDB-logs%20y%20alertas-47A248?style=for-the-badge&logo=mongodb&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Jupyter-EDA-F37626?style=for-the-badge&logo=jupyter&logoColor=white"/>
-  <img src="https://img.shields.io/badge/datos-sint%C3%A9ticos-lightgrey?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Kafka-streaming-231F20?style=for-the-badge&logo=apachekafka&logoColor=white"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-DW%20en%20estrella-336791?style=for-the-badge&logo=postgresql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Docker-compose-2496ED?style=for-the-badge&logo=docker&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Jupyter-auditor%C3%ADa-F37626?style=for-the-badge&logo=jupyter&logoColor=white"/>
+</p>
+<p>
+  <img src="https://img.shields.io/badge/transacciones-590%2C540-informational?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/fraude-3.5%25-red?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/PR--AUC%20prueba-0.558-4CAF50?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/paridad%20batch%E2%80%93streaming-diferencia%200-4CAF50?style=for-the-badge"/>
 </p>
 
 <blockquote>
-<strong>Meta:</strong> detectar transacciones bancarias fraudulentas combinando un lakehouse para el histórico, una base relacional para las transacciones y una base documental para los registros y alertas.
+<strong>Meta:</strong> un pipeline de punta a punta que detecta fraude sin fugas de información: partición temporal, atributos calculados solo con el pasado y un único módulo de atributos para batch y streaming.
 </blockquote>
 </div>
 
 ---
 
-> **Proyecto académico (UNRC).** El dataset es una colección de transacciones bancarias **sintéticas**; los nombres de clientes y cuentas no corresponden a personas reales.
+> **Proyecto académico (UNRC).** Usa el dataset público IEEE-CIS de Vesta (Kaggle). Los datos no se incluyen en el repositorio; el paso 01 los descarga con `kagglehub`.
 
 ## Tabla de contenidos
 
 - [Qué es](#qué-es)
-- [Estado del proyecto](#estado-del-proyecto)
 - [Arquitectura](#arquitectura)
-- [Dataset](#dataset)
+- [Resultados](#resultados)
 - [Estructura del repositorio](#estructura-del-repositorio)
 - [Cómo correrlo](#cómo-correrlo)
-- [Pendiente](#pendiente)
+- [Versión original](#versión-original)
 
 ---
 
 ## Qué es
 
-Un prototipo de infraestructura de datos para un sistema de detección de fraude. Reúne tres capas:
+Esta versión rehace el proyecto original después de una **auditoría** (`fraude-pipeline/notebooks/01_auditoria_modelo_fraude.ipynb`) que encontró cuatro problemas: datos sintéticos con una regla obvia, partición aleatoria, atributos distintos entre entrenamiento y streaming, y un umbral sin costo. La versión corregida:
 
-1. **Lakehouse (Delta Lake sobre Spark):** guarda el histórico de transacciones leído del CSV.
-2. **MySQL:** tabla `transacciones` con la bandera `is_fraud` y la probabilidad `fraud_probability`.
-3. **MongoDB:** colecciones `transaction_logs` (índice único por `transaction_id`) y `fraud_alerts`.
+- Parte de **datos reales** (590,540 transacciones, 3.5 % de fraude).
+- Separa el tiempo en entrenamiento (días 1–120), validación (121–150) y prueba (151–183).
+- Usa **un solo `features.py`** para batch y streaming, y lo comprueba con una prueba automática.
+- Elige modelo y umbral **solo con validación**, y mide el costo de revisar.
 
-## Estado del proyecto
-
-| Pieza | Archivo | Estado |
-|---|---|---|
-| Carga del histórico a Delta Lake | `proyectoPP/cargar_historico.py` | Hecho |
-| Creación de MySQL y MongoDB | `Deteccion_fraude/src/setup_databases.py` | Hecho |
-| Configuración de conexiones y Spark | `Deteccion_fraude/config.py` | Hecho |
-| Dataset limpio (11,876 transacciones) | `proyectoPP/datasets/` | Incluido |
-| Productor y consumidor de transacciones | `proyectoPP/productor.py`, `consumidor.py` | **Vacíos** (por implementar) |
-| EDA y consultas | `proyectoPP/EDA.ipynb`, `consultas.ipynb` | **Vacíos** (por completar) |
-| Modelo de detección de fraude | — | Pendiente |
+El detalle de cada paso, los resultados y las limitaciones están en [`fraude-pipeline/README.md`](fraude-pipeline/README.md).
 
 ## Arquitectura
 
 ```mermaid
 flowchart LR
-    CSV["<b>CSV histórico</b><br/>transacciones bancarias<br/>limpias"]
-    SP["<b>Apache Spark</b><br/>cargar_historico.py"]
-    DL[("<b>Delta Lake</b><br/>histórico")]
-    PR["<b>Productor</b><br/>productor.py"]
-    CO["<b>Consumidor</b><br/>consumidor.py"]
-    MY[("<b>MySQL</b><br/>transacciones<br/>is_fraud · fraud_probability")]
-    MO[("<b>MongoDB</b><br/>transaction_logs<br/>fraud_alerts")]
-    NB["<b>Notebooks</b><br/>EDA · consultas"]
+    CSV["<b>CSV Kaggle</b><br/>IEEE-CIS"] --> BR[("<b>Bronze</b><br/>Delta")]
+    BR --> SI[("<b>Silver</b><br/>Delta · pruebas de calidad")]
+    SI --> GO[("<b>Gold</b><br/>Delta · atributos")]
+    GO --> MOD["<b>Grafo · Modelos<br/>Decisión</b>"]
 
-    CSV --> SP --> DL
-    PR -.-> CO
-    CO -.-> MY
-    CO -.-> MO
-    DL -.-> NB
-    MY -.-> NB
+    KA["<b>Kafka</b><br/>transacciones"] --> ST["<b>Spark Structured<br/>Streaming</b>"]
+    MOD --> FE["<b>features.py</b><br/>(el mismo para batch y streaming)"]
+    ST --> FE
+    FE --> AL["<b>Modelo → alertas</b>"]
 
-    classDef hecho fill:#e6f5ea,stroke:#3a9a5b,color:#222
-    classDef pendiente fill:#fff4e0,stroke:#e0a030,color:#222,stroke-dasharray: 4 3
-    class CSV,SP,DL,MY,MO hecho
-    class PR,CO,NB pendiente
+    AL --> DA[("<b>Delta</b><br/>alertas")]
+    AL --> PA[("<b>PostgreSQL</b><br/>operacion.alertas")]
+    COG["<b>Cómputo cognitivo</b><br/>explicación · casos parecidos · acción"] --> PA
+    AL --> DW[("<b>PostgreSQL dw.*</b><br/>esquema estrella")]
+
+    classDef datos fill:#e8f1fb,stroke:#3b78c4,color:#222
+    classDef proceso fill:#fff4e0,stroke:#e0a030,color:#222
+    classDef salida fill:#e6f5ea,stroke:#3a9a5b,color:#222
+    class BR,SI,GO,DA datos
+    class CSV,KA,ST,MOD,FE,COG proceso
+    class AL,PA,DW salida
 ```
 
-Verde: implementado. Naranja con línea punteada: por implementar.
-
-## Dataset
-
-`proyectoPP/datasets/transacciones_bancarias_limpias (1).csv`: 11,876 filas y 19 columnas.
-
-| Grupo | Columnas |
+| Paso | Qué hace |
 |---|---|
-| Identificación | `id_transaccion`, `id_cliente`, `nombre_cliente`, `cuenta_origen`, `cuenta_destino` |
-| Movimiento | `fecha`, `hora_movimiento`, `monto`, `divisa`, `tipo_transaccion`, `categoria`, `concepto_movimiento` |
-| Contexto | `ciudad`, `canal_transaccion`, `medio_pago`, `estatus` |
-| Saldos | `saldo_previo`, `saldo_posterior` |
-| Etiqueta | `fraude_probable` (Sí / No) |
+| `01_bronze` · `02_silver` · `03_gold` | CSV → Delta, pruebas de calidad y atributos en el punto del tiempo |
+| `04_grafo` | Grafo cliente–dispositivo y anillos de fraude (matemáticas discretas) |
+| `05_modelos` | GBT y regresión logística en Spark MLlib, con ablación y calibración |
+| `06_decision` | Regla de Bayes, mochila con capacidad y colas M/M/c con Monte Carlo |
+| `07_productor_kafka` · `08_consumidor_streaming` | Flujo en tiempo real con los mismos atributos |
+| `09_paridad` | Prueba de que streaming y batch dan la misma probabilidad |
+| `10_data_warehouse` | Esquema estrella y consultas OLAP en PostgreSQL |
+| `11_cognitivo` | Explicación en español, casos parecidos y acción sugerida |
+
+## Resultados
+
+Mes de prueba: 94,635 transacciones y 3,282 fraudes.
+
+| Modelo | PR-AUC prueba | ROC-AUC | Recall revisando 3.35 % |
+|---|---|---|---|
+| GBT con columnas originales | 0.461 | 0.890 | 46.1 % |
+| GBT con todos los atributos | 0.488 | 0.903 | 48.0 % |
+| **Regresión logística (elegida por validación)** | **0.558** | **0.922** | **53.6 %** |
+
+- **Paridad batch–streaming:** diferencia máxima 0 en 94,635 transacciones.
+- **Anillos de fraude:** 219 componentes con 2 o más clientes defraudadores, contra 74 esperadas al azar.
+- **Ordenar por pérdida esperada** (probabilidad × monto) recupera 63 % del dinero, contra 42 % si se ordena solo por probabilidad.
+
+Las limitaciones (columnas V, costo de revisión supuesto, identidad de cliente aproximada) están en el README de la carpeta.
 
 ## Estructura del repositorio
 
 ```
 pp25-v2/
-├── Deteccion_fraude/
-│   ├── config.py                 conexiones MySQL y MongoDB, parámetros de Spark
-│   └── src/setup_databases.py    crea la base, la tabla y los índices
-├── proyectoPP/
-│   ├── cargar_historico.py       CSV → tabla Delta
-│   ├── productor.py              (vacío)
-│   ├── consumidor.py             (vacío)
-│   ├── EDA.ipynb                 (vacío)
-│   ├── consultas.ipynb           (vacío)
-│   └── datasets/                 CSV de transacciones
-└── files.zip                     Asistente de negocio con voz (Streamlit) y recomendador; proyecto aparte
+├── fraude-pipeline/        versión corregida (la vigente)
+│   ├── pasos/              01 a 11, uno por etapa
+│   ├── src/                config, sesión de Spark, features y modelado
+│   ├── sql/                esquemas de operación y data warehouse
+│   ├── notebooks/          auditoría del original y prueba con datos reales
+│   ├── reporte/            resultados (CSV, JSON y figuras)
+│   ├── docker-compose.yml  Kafka y PostgreSQL
+│   └── correr_todo.sh
+├── Deteccion_fraude/       versión original (MySQL y MongoDB)
+├── proyectoPP/             versión original (carga a Delta Lake)
+└── files.zip               asistente de negocio con voz; proyecto aparte
 ```
 
 ## Cómo correrlo
 
-Requiere Python 3.10+, MySQL y MongoDB locales, y Java para Spark.
+Requiere Docker, Java 17 o 21 y Python 3.10+.
 
 ```bash
-pip install pyspark delta-spark pymysql pymongo
+cd fraude-pipeline
+docker compose up -d
+pip install -r requirements.txt
 ```
-
-1. Ajusta las credenciales en `Deteccion_fraude/config.py` (por defecto, servicios locales).
-2. Crea las bases de datos:
 
 ```bash
-python Deteccion_fraude/src/setup_databases.py
+export RUTA_IEEE=/ruta/a/ieee-cis    # opcional: si no, se descarga con kagglehub
+./correr_todo.sh                     # ~45 min en una laptop de 2 núcleos y 8 GB
 ```
 
-3. Carga el histórico a Delta Lake, desde la raíz del repositorio:
+## Versión original
 
-```bash
-python proyectoPP/cargar_historico.py
-```
-
-> `cargar_historico.py` escribe la tabla Delta en una ruta absoluta de la máquina del autor (`/home/zidnz/DanaPP/proyecto_fraude/deltaLake`). Cámbiala por una ruta propia antes de correrlo.
-
-## Pendiente
-
-- Implementar el productor y el consumidor de transacciones.
-- Completar el EDA y las consultas.
-- Entrenar y evaluar un modelo de detección, y llenar `fraud_probability`.
-- Sacar la ruta de Delta y las credenciales a variables de entorno.
+`Deteccion_fraude/` y `proyectoPP/` conservan la primera versión (datos sintéticos, MySQL y MongoDB). Se dejan por historia: la auditoría explica por qué se reemplazó.
 
 <div align="center">
 <sub>Licenciatura en Ciencia de Datos para el Negocio · UNRC</sub>

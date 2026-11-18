@@ -1,0 +1,55 @@
+{
+  "por_accion": [
+    {
+      "accion_sugerida": "Bloquear la tarjeta y contactar al titular",
+      "alertas": 726,
+      "tasa_fraude_real": 0.8608815426997245
+    },
+    {
+      "accion_sugerida": "Revisar de inmediato",
+      "alertas": 361,
+      "tasa_fraude_real": 0.6066481994459834
+    },
+    {
+      "accion_sugerida": "Revisar en la cola normal",
+      "alertas": 2339,
+      "tasa_fraude_real": 0.1333903377511757
+    }
+  ],
+  "auc_dentro_de_alertas": {
+    "solo_modelo": 0.8807478316540402,
+    "solo_vecinos": 0.8236395439232963,
+    "modelo_mas_vecinos": 0.8768105117144033
+  },
+  "fraude_si_vecinos_mayoria": 0.86002886002886,
+  "fraude_si_no": 0.20490303695572631,
+  "ejemplos": [
+    {
+      "TransactionID": 3513026,
+      "TransactionAmt": 61.95,
+      "prob": 0.999955829038968,
+      "accion_sugerida": "Bloquear la tarjeta y contactar al titular",
+      "explicacion": "Alerta porque el cliente ya tuvo fraude confirmado (riesgo 54%) (supera al 99% de las transacciones; en ese grupo el fraude es 27.1 veces más común).",
+      "casos_similares": "De 7 casos parecidos ya resueltos, 1 fueron fraude (IDs: 3185663, 3338012, 3392018…)",
+      "isFraud": 0
+    },
+    {
+      "TransactionID": 3563449,
+      "TransactionAmt": 35.0,
+      "prob": 0.8979303586993053,
+      "accion_sugerida": "Revisar de inmediato",
+      "explicacion": "Alerta porque su grupo de tarjeta (card1) tiene 7% de fraude ya confirmado (supera al 95% de las transacciones; en ese grupo el fraude es 4.8 veces más común).",
+      "casos_similares": "De 7 casos parecidos ya resueltos, 1 fueron fraude (IDs: 3291683, 3361718, 3340177…)",
+      "isFraud": 1
+    },
+    {
+      "TransactionID": 3530429,
+      "TransactionAmt": 295.0,
+      "prob": 0.4996218299439865,
+      "accion_sugerida": "Revisar en la cola normal",
+      "explicacion": "Alerta porque su grupo de tarjeta (card1) tiene 13% de fraude ya confirmado (supera al 97% de las transacciones; en ese grupo el fraude es 6.1 veces más común); hizo 3 transacciones en las últimas 24 horas (supera al 92% de las transacciones; en ese grupo el fraude es 2.2 veces más común); hizo 1 transacciones en la última hora (supera al 94% de las transacciones; en ese grupo el fraude es 2.0 veces más común).",
+      "casos_similares": "De 7 casos parecidos ya resueltos, 2 fueron fraude (IDs: 3286478, 3245720, 3256266…)",
+      "isFraud": 0
+    }
+  ]
+}

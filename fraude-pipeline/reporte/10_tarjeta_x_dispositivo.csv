@@ -1,0 +1,10 @@
+tipo,dispositivo,transacciones,tasa,nivel
+credit,mobile,23802,0.1391,0
+debit,mobile,31747,0.0736,0
+credit,desktop,49344,0.0673,0
+debit,desktop,35725,0.0625,0
+credit,desconocido,75840,0.0438,0
+debit,desconocido,372466,0.0164,0
+credit,,148986,0.0668,1
+debit,,439938,0.0243,1
+,,588924,0.035,3

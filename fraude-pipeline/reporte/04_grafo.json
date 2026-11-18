@@ -1,0 +1,15 @@
+{
+  "aristas": 72219,
+  "dispositivos": 34247,
+  "dispositivos_hub_quitados": 117,
+  "clientes_en_grafo": 46060,
+  "tasa_fraude_clientes": 0.05970473295701259,
+  "componentes_multicliente": 4237,
+  "anillos_2mas_fraudes": 219,
+  "anillos_esperados_al_azar": 73.985,
+  "anillos_esperados_p95": 88.04999999999998,
+  "clientes_fraude_en_anillos": 2407,
+  "mayor_componente_clientes": 17337,
+  "anillos_de_2_a_20_clientes": 213,
+  "tasa_fraude_en_anillos": 0.12998865907004375
+}

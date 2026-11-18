@@ -1,0 +1,13 @@
+{
+  "comparadas": 94635,
+  "dif_max": 0.0,
+  "dif_media": 0.0,
+  "decisiones_iguales": 1.0,
+  "alertas": 3426,
+  "alertas_fraude": 1156,
+  "fraudes": 3282,
+  "eventos_batch": 94635,
+  "eventos_stream": 94635,
+  "precision_alertas": 0.3374197314652656,
+  "recall_alertas": 0.352224253503961
+}

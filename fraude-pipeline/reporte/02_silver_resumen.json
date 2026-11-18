@@ -1,0 +1,1 @@
+[{"particion":"entreno","filas":410601,"tasa_fraude":0.0351168166,"dia_min":1.0,"dia_max":119.9997569444},{"particion":"validacion","filas":85304,"tasa_fraude":0.0347228735,"dia_min":120.0001388889,"dia_max":150.0},{"particion":"prueba","filas":94635,"tasa_fraude":0.034680615,"dia_min":150.0009259259,"dia_max":182.9992013889}]
